@@ -1,5 +1,7 @@
 const admin = require("firebase-admin");
 const fs = require("fs");
+const {config} = require('dotenv');
+config()
 
 const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_FILE;
 
