@@ -1,8 +1,13 @@
 const admin = require("firebase-admin");
-const { config } = require("dotenv");
-config();
+const fs = require("fs");
 
-const serviceAccount = require("../config/firebaseServiceAccountKey.json"); 
+const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_FILE;
+
+if (!serviceAccountPath) {
+    throw new Error("Firebase service account file path not set.");
+}
+
+const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
