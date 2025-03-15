@@ -83,3 +83,8 @@ const pool = require("../config/db");
          res.status(500).json({ error: "Upload failed" });
      }
  };
+
+
+//curl -v -X POST "https://bot-f0c6.onrender.com/api/upload" -F "resource=@C:\Users\AKANKSHA\Documents\104405152_ExamForm.PDF" -F "name=bxe decode" -F "year=First year" -F "branch=Computer Engineering" -F "category=Decode"
+
+//curl -X GET "https://bot-f0c6.onrender.com/api/resources?year=First%20year&branch=Computer%20Engineering&category=Decode"
