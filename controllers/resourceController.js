@@ -53,7 +53,7 @@ const pool = require("../config/db");
          const b_id = branchQuery.rows[0].b_id;
          const c_id = categoryQuery.rows[0].c_id;
          const s_id = subjectQuery.rows[0].s_id;
- 
+
          const file = bucket.file(`resources/${Date.now()}_${resource.originalname}`);
          const stream = file.createWriteStream({
              metadata: { contentType: resource.mimetype },
@@ -68,12 +68,12 @@ const pool = require("../config/db");
                  expires: "03-09-2030", 
              });
  
-             await pool.query(
-                 "INSERT INTO resources (r_name, r_year, r_branch, r_category, r_url, r_subject) VALUES ($1, $2, $3, $4, $5, $6)",
+             const result = await pool.query(
+                 "INSERT INTO resources (r_name, r_year, r_branch, r_category, r_url, r_subject) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
                  [name, y_id, b_id, c_id, url, s_id]
              );
  
-             res.json({ message: "Resource uploaded successfully", url });
+             res.json({ message: "Resource uploaded successfully", result });
          });
  
          stream.on("error", (error) => {
