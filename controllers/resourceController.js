@@ -11,7 +11,7 @@ const pool = require("../config/db");
          const categoryQuery = await pool.query("SELECT c_id FROM categories WHERE c_name = $1", [category]);
          const subjectQuery = await pool.query("SELECT s_id FROM subjects WHERE s_name = $1", [subject]);
          if (yearQuery.rowCount === 0 || branchQuery.rowCount === 0 || categoryQuery.rowCount === 0 || subjectQuery.rowCount === 0) {
-             return res.status(404).json({ error: "Invalid year, branch, or category" });
+             return res.status(404).json({ error: "No resource found" });
          }
  
          const y_id = yearQuery.rows[0].y_id;
@@ -54,6 +54,8 @@ const pool = require("../config/db");
          const c_id = categoryQuery.rows[0].c_id;
          const s_id = subjectQuery.rows[0].s_id;
 
+         
+
          const file = bucket.file(`resources/${Date.now()}_${resource.originalname}`);
          const stream = file.createWriteStream({
              metadata: { contentType: resource.mimetype },
@@ -87,7 +89,36 @@ const pool = require("../config/db");
  };
 
 
-//curl -v -X POST "https://bot-f0c6.onrender.com/api/upload" -F "resource=@C:\Users\AKANKSHA\Documents\104405152_ExamForm.PDF" -F "name=bxe decode" -F "year=First year" -F "branch=Computer Engineering" -F "category=Decode"
+ exports.getSubjects = async(req, res) => {
+    try {
+        const { year, branch } = req.query;
+    
+        if (!year || !branch) {
+          return res.status(400).json({ error: "Year and branch are required." });
+        }
+    
+        const query = `
+          SELECT s_id, s_name 
+          FROM subjects 
+          WHERE s_year = (SELECT y_id FROM years WHERE y_name = $1)
+            AND s_branch = (SELECT b_id FROM branches WHERE b_name = $2)
+        `;
+    
+        const result = await pool.query(query, [year, branch]);
+    
+        if (result.rows.length === 0) {
+          return res.status(404).json({ message: "No subjects found." });
+        }
+    
+        res.json(result.rows);
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+ }
 
-//curl -X GET "https://bot-f0c6.onrender.com/api/resources?year=First%20year&branch=Computer%20Engineering&category=Decode"
+
+//curl -v -X POST "https://bot-f0c6.onrender.com/api/upload" -F "resource=@C:\Users\AKANKSHA\Documents\104405152_ExamForm.PDF" -F "name=DBMS decode" -F "year=Third year" -F "branch=Computer Engineering" -F "category=Decode" -F "subject=DBMS"
+
+//curl -X GET "https://bot-f0c6.onrender.com/api/resources?year=Third%20year&branch=Computer%20Engineering&category=Decode&subject=DBMS"
 
