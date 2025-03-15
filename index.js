@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-    origin: "http://localhost:3000",  
+    origin: "https://bot-frontend-flame.vercel.app/",  
     methods: "GET,POST",              
     allowedHeaders: "Content-Type"    
 }));
