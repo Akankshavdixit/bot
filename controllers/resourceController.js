@@ -43,7 +43,7 @@ const pool = require("../config/db");
          const yearQuery = await pool.query("SELECT y_id FROM years WHERE y_name = $1", [year]);
          const branchQuery = await pool.query("SELECT b_id FROM branches WHERE b_name = $1", [branch]);
          const categoryQuery = await pool.query("SELECT c_id FROM categories WHERE c_name = $1", [category]);
-         const subjectQuery = await pool.query("SELECT s_id FROM categories WHERE s_name = $1", [subject]);
+         const subjectQuery = await pool.query("SELECT s_id FROM subjects WHERE s_name = $1", [subject]);
 
          if (yearQuery.rowCount === 0 || branchQuery.rowCount === 0 || categoryQuery.rowCount === 0 || subjectQuery.rowCount === 0) {
              return res.status(404).json({ error: "Invalid year, branch, or category" });
