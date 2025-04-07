@@ -8,10 +8,11 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-    origin: "https://bot-frontend-flame.vercel.app",  
-    methods: "GET,POST",              
-    allowedHeaders: "Content-Type"    
-}));
+    origin: ["https://bot-frontend-flame.vercel.app", "http://localhost:3002"],
+    methods: "GET,POST",
+    allowedHeaders: "Content-Type"
+  }));
+  
  
  const testconnection = async ()=>{  
      try{
