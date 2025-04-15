@@ -28,7 +28,6 @@ app.use(cors({
  
  app.use("/api", resourceRoutes);
  
- 
  app.listen(process.env.PORT, ()=> {
      console.log('App is listening on port ', process.env.PORT);
      

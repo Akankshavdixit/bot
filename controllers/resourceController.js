@@ -117,6 +117,35 @@ const pool = require("../config/db");
       }
  }
 
+exports.getYears = async (req, res) => {
+    try {
+        const result = await pool.query("SELECT y_id, y_name FROM years");
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error fetching years:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+exports.getBranches = async (req, res) => {
+    try {
+        const result = await pool.query("SELECT b_id, b_name FROM branches");
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error fetching branches:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+exports.getCategories = async (req, res) => {
+    try {
+        const result = await pool.query("SELECT c_id, c_name FROM categories");
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error fetching categories:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
 
 //curl -v -X POST "https://bot-f0c6.onrender.com/api/upload" -F "resource=@C:\Users\AKANKSHA\Documents\104405152_ExamForm.PDF" -F "name=DBMS decode" -F "year=Third year" -F "branch=Computer Engineering" -F "category=Decode" -F "subject=DBMS"
 
